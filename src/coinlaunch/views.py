@@ -1,8 +1,15 @@
 from django.shortcuts import render
 from visits.models import PageVisit
+import pathlib  
+
+this_dir = pathlib.Path(__file__).resolve().parent
 
 
-def home_page_view(request):
+def home_view(request, *args, **kwargs):
+    return about_view(request, *args, **kwargs)
+
+
+def about_view(request, *args, **kwargs):
     queryset = PageVisit.objects.filter(path=request.path)
     
     my_title = "CoinLaunch"
@@ -14,16 +21,4 @@ def home_page_view(request):
     }
     html_template = "home.html"
     PageVisit.objects.create(path=request.path) 
-    return render(request, html_template, my_context)
-
-
-def about_page_view(request):
-    my_title = "About CoinLaunch"
-    my_context = {
-        "title": my_title,
-        "content": "CoinLaunch is a platform for launching new cryptocurrencies.",
-        "featured": True,
-    }
-    html_template = "about.html"
-    
     return render(request, html_template, my_context)
